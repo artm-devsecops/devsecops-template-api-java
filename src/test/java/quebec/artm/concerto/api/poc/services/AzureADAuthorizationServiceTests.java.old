@@ -1,0 +1,66 @@
+package quebec.artm.concerto.api.poc.services;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import quebec.artm.concerto.api.poc.options.AzureADRegistrationOptions;
+
+public class AzureADAuthorizationServiceTests {
+
+    @Test
+    public void GetOnBehalfOfJwtReturnsResponse() {
+        // arrange
+        AzureADRegistrationOptions azureADRegistrationOptions = new AzureADRegistrationOptions();
+        azureADRegistrationOptions.setTenantId(AzureADRegistrationOptions.class.getField("tenandId").getName());
+        azureADRegistrationOptions.setClientId(AzureADRegistrationOptions.class.getField("clientId").getName());
+        azureADRegistrationOptions.setClientSecret(AzureADRegistrationOptions.class.getField("clientSecret").getName());
+
+        AzureADRegistrationOptions options = Mockito.mock(AzureADRegistrationOptions.class);
+        Mockito.when(options).thenReturn(azureADRegistrationOptions);
+
+        
+
+        RestTemplate restTemplate = Mockito.mock(RestTemplate.class);
+        AzureADAuthorizationService azureADAuthorizationService = new AzureADAuthorizationService(
+                azureADRegistrationOptions, restTemplate);
+
+        String json = "{ \"access_token\": \"test\" }";
+        Map<String, String> vals = new HashMap<String, String>();
+        vals.put("access_token", "test");
+        ResponseEntity<Map> response = new ResponseEntity<Map>(vals, org.springframework.http.HttpStatus.OK);
+        Mockito.when(
+                restTemplate.postForEntity(Mockito.anyString(), Mockito.any(HttpEntity.class), Mockito.eq(Map.class)))
+                .thenReturn(response);
+
+        // create a mock session
+        MockHttpSession session = new MockHttpSession();
+        // create a mock request
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setSession(session);
+        // set request attribute
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        request.addHeader("Authorization", "Bearer this_is_an_access_token");
+
+        // act
+        Map<String, String> result = azureADAuthorizationService.getOnBehalfOfJwt("test_scope");
+
+        // assert
+        assertNotNull(result);
+        assertEquals("test", result.get("access_token"));
+    }
+
+}

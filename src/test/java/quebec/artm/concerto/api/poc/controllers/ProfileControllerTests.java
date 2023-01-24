@@ -16,15 +16,15 @@ public class ProfileControllerTests {
         MicrosoftGraphService iamService = Mockito.mock(MicrosoftGraphService.class);
         ProfileController sut = new ProfileController(iamService);
         String json = "{ \"givenName\": \"Bob\" }";
-    
+
         Mockito.when(iamService.getBasicProfile()).thenReturn(json);
-    
+
         // act
         ResponseEntity<String> result = sut.me();
-    
+
         // assert
         assertEquals(json, result.getBody());
         Mockito.verify(iamService, Mockito.times(1)).getBasicProfile();
     }
-      
+
 }

@@ -57,3 +57,19 @@ jobs:
         minimum_coverage: 80
         fail_below_threshold: false
         publish_only_summary: false
+
+    - name: Docker build
+      run: docker build -t  ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} -f ./Dockerfile ./target/
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }}'
+        severity: 'CRITICAL,HIGH'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
