@@ -31,3 +31,9 @@ jobs:
 
     - name: Tests
       run: mvn --batch-mode --update-snapshots verify test package
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        junit_files: "**/surefire-reports/TEST-*.xml"
