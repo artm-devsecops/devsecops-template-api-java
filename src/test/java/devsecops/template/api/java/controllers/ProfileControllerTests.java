@@ -1,4 +1,4 @@
-package quebec.artm.concerto.api.poc.controllers;
+package devsecops.template.api.java.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
-import quebec.artm.concerto.api.poc.services.MicrosoftGraphService;
+import devsecops.template.api.java.services.MicrosoftGraphService;
 
 public class ProfileControllerTests {
 

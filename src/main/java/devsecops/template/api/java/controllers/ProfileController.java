@@ -1,4 +1,4 @@
-package quebec.artm.concerto.api.poc.controllers;
+package devsecops.template.api.java.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import quebec.artm.concerto.api.poc.services.IIAMService;
+import devsecops.template.api.java.services.IIAMService;
 
 @RestController
 @RequestMapping("/profile")

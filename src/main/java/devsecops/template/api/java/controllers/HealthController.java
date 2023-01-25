@@ -1,4 +1,4 @@
-package quebec.artm.concerto.api.poc.controllers;
+package devsecops.template.api.java.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

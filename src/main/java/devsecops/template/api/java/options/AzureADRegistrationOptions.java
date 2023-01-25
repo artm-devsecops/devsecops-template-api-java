@@ -1,4 +1,4 @@
-package quebec.artm.concerto.api.poc.options;
+package devsecops.template.api.java.options;
 
 public class AzureADRegistrationOptions {
     private String tenantId;

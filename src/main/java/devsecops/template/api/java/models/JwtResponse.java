@@ -1,4 +1,4 @@
-package quebec.artm.concerto.api.poc.models;
+package devsecops.template.api.java.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

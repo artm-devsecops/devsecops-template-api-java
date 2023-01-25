@@ -9,10 +9,10 @@
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
-	<groupId>quebec.artm.concerto.api.poc</groupId>
-	<artifactId>quebec.artm.concerto.api.poc</artifactId>
+	<groupId>devsecops.template.api.java</groupId>
+	<artifactId>devsecops.template.api.java</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>poc-java-api</name>
+	<name>devsecops-template-api-java</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>

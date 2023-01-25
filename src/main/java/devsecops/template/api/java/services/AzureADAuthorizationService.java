@@ -1,4 +1,4 @@
-package quebec.artm.concerto.api.poc.services;
+package devsecops.template.api.java.services;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import quebec.artm.concerto.api.poc.models.JwtResponse;
-import quebec.artm.concerto.api.poc.options.AzureADRegistrationOptions;
+import devsecops.template.api.java.models.JwtResponse;
+import devsecops.template.api.java.options.AzureADRegistrationOptions;
 
 public class AzureADAuthorizationService implements IAuthorizationService {
 

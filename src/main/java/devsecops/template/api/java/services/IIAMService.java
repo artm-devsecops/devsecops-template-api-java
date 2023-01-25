@@ -1,4 +1,4 @@
-package quebec.artm.concerto.api.poc.services;
+package devsecops.template.api.java.services;
 
 public interface IIAMService {
     public String getBasicProfile();

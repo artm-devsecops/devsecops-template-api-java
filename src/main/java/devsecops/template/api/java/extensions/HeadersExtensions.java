@@ -1,4 +1,4 @@
-package quebec.artm.concerto.api.poc.extensions;
+package devsecops.template.api.java.extensions;
 
 import java.util.Map;
 
