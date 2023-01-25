@@ -66,6 +66,7 @@ jobs:
       with:
         image: ghcr.io/artm-devsecops/devsecops-template-api-java
         tags: v1 ${{ github.sha }}
+        context: ./target
         containerfiles: |
           ./Containerfile
 
