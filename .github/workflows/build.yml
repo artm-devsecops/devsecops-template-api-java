@@ -58,8 +58,16 @@ jobs:
         fail_below_threshold: false
         publish_only_summary: false
 
-    - name: Docker build
-      run: docker build -t  ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} -f ./Dockerfile ./target/
+    # - name: Docker build
+    #   run: docker build -t  ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} -f ./Containerfile ./target/
+
+    - name: Buildah Action
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: ghcr.io/artm-devsecops/devsecops-template-api-java
+        tags: v1 ${{ github.sha }}
+        containerfiles: |
+          ./Containerfile
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
