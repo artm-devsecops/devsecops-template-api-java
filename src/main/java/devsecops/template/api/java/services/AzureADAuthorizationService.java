@@ -6,8 +6,10 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import devsecops.template.api.java.models.JwtResponse;
 import devsecops.template.api.java.options.AzureADRegistrationOptions;
 
+@Service
 public class AzureADAuthorizationService implements IAuthorizationService {
 
     private final Logger logger = LoggerFactory.getLogger(AzureADAuthorizationService.class);
@@ -25,6 +28,7 @@ public class AzureADAuthorizationService implements IAuthorizationService {
     private final RestTemplate restTemplate;
     private final String tenantId;
 
+    @Autowired
     public AzureADAuthorizationService(AzureADRegistrationOptions options, RestTemplate restTemplate,
             HttpHeaders headers) {
         this.options = options;

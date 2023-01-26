@@ -1,5 +1,8 @@
 package devsecops.template.api.java.options;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class AzureADRegistrationOptions {
     private String tenantId;
     private String clientId;

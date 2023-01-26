@@ -71,12 +71,12 @@ jobs:
           ./Containerfile
 
     - name: Buildah push
-      run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} oci-archive:/github/workspace/devsecops-template-api-java.tar
+      run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} oci-archive:devsecops-template-api-java.tar
 
     - name: Run Trivy vulnerability scanner in tarball mode
       uses: aquasecurity/trivy-action@master
       with:
-        input: /github/workspace/devsecops-template-api-java.tar
+        input: devsecops-template-api-java.tar
         severity: 'CRITICAL,HIGH'
         format: 'sarif'
         output: 'trivy-results.sarif'
