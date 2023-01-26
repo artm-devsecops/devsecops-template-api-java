@@ -59,9 +59,9 @@ jobs:
         publish_only_summary: false
 
     # - name: Docker build
-    #   run: docker build -t  ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} -f ./Containerfile ./target/
+    #   run: docker build -t ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} -f ./Containerfile ./target/
 
-    - name: Buildah Action
+    - name: Buildah build
       uses: redhat-actions/buildah-build@v2
       with:
         image: ghcr.io/artm-devsecops/devsecops-template-api-java
@@ -70,13 +70,24 @@ jobs:
         containerfiles: |
           ./Containerfile
 
-    - name: Run Trivy vulnerability scanner
+    - name: Buildah push
+      run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java${{ github.sha }} oci-archive:/github/workspace/devsecops-template-api-java.tar
+
+    - name: Run Trivy vulnerability scanner in tarball mode
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: 'ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }}'
+        input: /github/workspace/devsecops-template-api-java.tar
         severity: 'CRITICAL,HIGH'
         format: 'sarif'
         output: 'trivy-results.sarif'
+
+    # - name: Run Trivy vulnerability scanner
+    #   uses: aquasecurity/trivy-action@master
+    #   with:
+    #     image-ref: 'ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }}'
+    #     severity: 'CRITICAL,HIGH'
+    #     format: 'sarif'
+    #     output: 'trivy-results.sarif'
 
     - name: Upload Trivy scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v2
