@@ -70,31 +70,26 @@ jobs:
         containerfiles: |
           ./Containerfile
 
-    # - name: Buildah push
-    #   run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} oci-archive:devsecops-template-api-java.tar
+    - name: Buildah push
+      run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} oci:oci-devsecops-template-api-java
 
-    - name: Enable podman socket
-      run: |
-        systemctl --user status podman.socket
-        echo $USER
-
-    # - name: Run Trivy vulnerability scanner in tarball mode
-    #   uses: aquasecurity/trivy-action@master
-    #   with:
-    #     input: devsecops-template-api-java.tar
-    #     severity: 'CRITICAL,HIGH'
-    #     format: 'sarif'
-    #     output: 'trivy-results.sarif'
-
-    - name: Run Trivy vulnerability scanner
+    - name: Run Trivy vulnerability scanner in tarball mode
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: 'ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }}'
+        input: oci-devsecops-template-api-java
         severity: 'CRITICAL,HIGH'
         format: 'sarif'
         output: 'trivy-results.sarif'
-      env:
-        XDG_RUNTIME_DIR: /run/user/1001
+
+    # - name: Run Trivy vulnerability scanner
+    #   uses: aquasecurity/trivy-action@master
+    #   with:
+    #     image-ref: 'ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }}'
+    #     severity: 'CRITICAL,HIGH'
+    #     format: 'sarif'
+    #     output: 'trivy-results.sarif'
+    #   env:
+    #     XDG_RUNTIME_DIR: /run/user/1001
 
     # - name: Upload Trivy scan results to GitHub Security tab
     #   uses: github/codeql-action/upload-sarif@v2
