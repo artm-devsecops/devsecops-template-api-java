@@ -76,30 +76,31 @@ jobs:
         run: |
           ls -la ./target/oci-devsecops-template-api-java
 
-      - name: install trivy
-        run: |
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.36.1/trivy_0.36.1_Linux-64bit.deb
-          sudo dpkg -i trivy_0.36.1_Linux-64bit.deb
+      # - name: install trivy
+      #   run: |
+      #     wget https://github.com/aquasecurity/trivy/releases/download/v0.36.1/trivy_0.36.1_Linux-64bit.deb
+      #     sudo dpkg -i trivy_0.36.1_Linux-64bit.deb
+
+      # - name: Run Trivy vulnerability scanner in tarball mode
+      #   run: |
+      #     trivy image \
+      #       --offline-scan \
+      #       --format sarif \
+      #       --vuln-type os,library \
+      #       --severity CRITICAL,HIGH \
+      #       --output trivy-results.sarif \
+      #       --timeout 5m0s \
+      #       --input ./target/oci-devsecops-template-api-java
 
       - name: Run Trivy vulnerability scanner in tarball mode
-        run: |
-          trivy image \
-            --offline-scan \
-            --format sarif \
-            --vuln-type os,library \
-            --severity CRITICAL,HIGH \
-            --output trivy-results.sarif \
-            --timeout 5m0s \
-            --input ./target/oci-devsecops-template-api-java
-
-    # - name: Run Trivy vulnerability scanner in tarball mode
-    #   uses: aquasecurity/trivy-action@master
-    #   with:
-    #     input: ./target/oci-devsecops-template-api-java
-    #     severity: 'CRITICAL,HIGH'
-    #     format: 'sarif'
-    #     output: 'trivy-results.sarif'
-    #     timeout: 10m0s
+        uses: aquasecurity/trivy-action@master
+        with:
+          input: ./target/oci-devsecops-template-api-java
+          severity: 'CRITICAL,HIGH'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+        env:
+          TRIVY_OFFLINE_SCAN: true
 
     # - name: Run Trivy vulnerability scanner
     #   uses: aquasecurity/trivy-action@master
