@@ -73,8 +73,8 @@ jobs:
     # - name: Buildah push
     #   run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} oci-archive:devsecops-template-api-java.tar
 
-    # - name: Enable podman socket
-    #   run: systemctl --user enable --now podman.socket
+    - name: Enable podman socket
+      run: systemctl --user enable --now podman.socket
 
     # - name: Run Trivy vulnerability scanner in tarball mode
     #   uses: aquasecurity/trivy-action@master
@@ -91,9 +91,6 @@ jobs:
         severity: 'CRITICAL,HIGH'
         format: 'sarif'
         output: 'trivy-results.sarif'
-
-    - name: Run trivy with debug info
-      run: trivy image ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} --debug
 
     # - name: Upload Trivy scan results to GitHub Security tab
     #   uses: github/codeql-action/upload-sarif@v2
