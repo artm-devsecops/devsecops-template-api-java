@@ -75,7 +75,7 @@ jobs:
 
     - name: Enable podman socket
       run: |
-        systemctl --user enable --now podman.socket
+        # systemctl --user enable --now podman.socket
         systemctl --user status podman.socket
 
     # - name: Run Trivy vulnerability scanner in tarball mode
@@ -94,7 +94,7 @@ jobs:
         format: 'sarif'
         output: 'trivy-results.sarif'
       env:
-        XDG_RUNTIME_DIR: /usr/lib/systemd/user/podman.socket
+        XDG_RUNTIME_DIR: /run/user/$USER
 
     # - name: Upload Trivy scan results to GitHub Security tab
     #   uses: github/codeql-action/upload-sarif@v2
