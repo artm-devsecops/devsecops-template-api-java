@@ -84,6 +84,7 @@ jobs:
       - name: Run Trivy vulnerability scanner in tarball mode
         run: |
           trivy image \
+            --offline-scan
             --format sarif \
             --vuln-type os,library \
             --severity CRITICAL,HIGH \
