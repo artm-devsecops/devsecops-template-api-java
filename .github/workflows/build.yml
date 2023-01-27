@@ -57,9 +57,6 @@ jobs:
           fail_below_threshold: false
           publish_only_summary: false
 
-      # - name: Docker build
-      #   run: docker build -t ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} -f ./Containerfile ./target/
-
       - name: Buildah build
         uses: redhat-actions/buildah-build@v2
         with:
@@ -72,47 +69,17 @@ jobs:
       - name: Buildah push
         run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} oci:./target/oci-devsecops-template-api-java
 
-      - name: debug
-        run: |
-          ls -la ./target/oci-devsecops-template-api-java
-
-      # - name: install trivy
-      #   run: |
-      #     wget https://github.com/aquasecurity/trivy/releases/download/v0.36.1/trivy_0.36.1_Linux-64bit.deb
-      #     sudo dpkg -i trivy_0.36.1_Linux-64bit.deb
-
-      # - name: Run Trivy vulnerability scanner in tarball mode
-      #   run: |
-      #     trivy image \
-      #       --offline-scan \
-      #       --format sarif \
-      #       --vuln-type os,library \
-      #       --severity CRITICAL,HIGH \
-      #       --output trivy-results.sarif \
-      #       --timeout 5m0s \
-      #       --input ./target/oci-devsecops-template-api-java
-
       - name: Run Trivy vulnerability scanner in tarball mode
         uses: aquasecurity/trivy-action@master
         with:
           input: ./target/oci-devsecops-template-api-java
-          severity: 'CRITICAL,HIGH'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          severity: "CRITICAL,HIGH"
+          format: "sarif"
+          output: "trivy-results.sarif"
         env:
           TRIVY_OFFLINE_SCAN: true
 
-    # - name: Run Trivy vulnerability scanner
-    #   uses: aquasecurity/trivy-action@master
-    #   with:
-    #     image-ref: 'ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }}'
-    #     severity: 'CRITICAL,HIGH'
-    #     format: 'sarif'
-    #     output: 'trivy-results.sarif'
-    #   env:
-    #     XDG_RUNTIME_DIR: /run/user/1001
-
-    # - name: Upload Trivy scan results to GitHub Security tab
-    #   uses: github/codeql-action/upload-sarif@v2
-    #   with:
-    #     sarif_file: 'trivy-results.sarif'
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: "trivy-results.sarif"
