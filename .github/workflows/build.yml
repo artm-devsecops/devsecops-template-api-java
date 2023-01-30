@@ -35,7 +35,7 @@ jobs:
       - name: Restore dependencies
         run: mvn dependency:resolve
 
-      - name: Tests
+      - name: Build and tests
         run: mvn --batch-mode --update-snapshots verify test package
 
       - name: Publish Test Results
@@ -44,7 +44,7 @@ jobs:
         with:
           junit_files: "**/surefire-reports/TEST-*.xml"
 
-      - name: JaCoCo Code Coverage Report
+      - name: Code Coverage Report
         id: jacoco_reporter
         uses: PavanMudigonda/jacoco-reporter@v4.8
         with:
@@ -57,7 +57,7 @@ jobs:
           fail_below_threshold: false
           publish_only_summary: false
 
-      - name: Buildah build
+      - name: Container build
         uses: redhat-actions/buildah-build@v2
         with:
           image: ghcr.io/artm-devsecops/devsecops-template-api-java
@@ -66,7 +66,7 @@ jobs:
           containerfiles: |
             ./Containerfile
 
-      - name: Buildah push
+      - name: Container push in oci format
         run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} oci:./target/oci-devsecops-template-api-java
 
       - name: Run Trivy vulnerability scanner in tarball mode
@@ -83,3 +83,13 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: "trivy-results.sarif"
+
+      - name: Log in to registry
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image push to registry
+        run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }}
