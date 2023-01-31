@@ -3,12 +3,12 @@
 
 name: Java
 
-permissions:
-  checks: write # Required for jacoco-reporter
-  pull-requests: write # Required for jacoco-reporter
-  packages: write # Required for Docker
-  contents: read # Required for jacoco-reporter
-  security-events: write # Required for Trivy
+# permissions:
+#   checks: write # Required for jacoco-reporter
+#   pull-requests: write # Required for jacoco-reporter
+#   packages: write # Required for Docker
+#   contents: read # Required for jacoco-reporter
+#   security-events: write # Required for Trivy
 
 on:
   push:
@@ -20,76 +20,24 @@ on:
       - "main"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-java-workflow:
+    permissions:
+      checks: write # Required for jacoco-reporter
+      pull-requests: write # Required for jacoco-reporter
+      contents: read # Required for jacoco-reporter
+    uses: artm-devsec-ops/.github/workflow-templates/artm-devsecops-build-java.yml@main
+    with:
+      java_version: 17
+      fail_below_threshold: false
 
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: "17"
-          distribution: "temurin"
-
-      - name: Restore dependencies
-        run: mvn dependency:resolve
-
-      - name: Build and tests
-        run: mvn --batch-mode --update-snapshots verify test package
-
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          junit_files: "**/surefire-reports/TEST-*.xml"
-
-      - name: Code Coverage Report
-        id: jacoco_reporter
-        uses: PavanMudigonda/jacoco-reporter@v4.8
-        with:
-          coverage_results_path: "target/site/jacoco/jacoco.xml"
-          coverage_report_name: Coverage
-          coverage_report_title: JaCoCo
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          skip_check_run: false
-          minimum_coverage: 80
-          fail_below_threshold: false
-          publish_only_summary: false
-
-      - name: Container build
-        uses: redhat-actions/buildah-build@v2
-        with:
-          image: ghcr.io/artm-devsecops/devsecops-template-api-java
-          tags: v1 ${{ github.sha }}
-          context: ./target
-          containerfiles: |
-            ./Containerfile
-
-      - name: Container push in oci format
-        run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }} oci:./target/oci-devsecops-template-api-java
-
-      - name: Run Trivy vulnerability scanner in tarball mode
-        uses: aquasecurity/trivy-action@master
-        with:
-          input: ./target/oci-devsecops-template-api-java
-          severity: "CRITICAL,HIGH"
-          format: "sarif"
-          output: "trivy-results.sarif"
-        env:
-          TRIVY_OFFLINE_SCAN: true
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: "trivy-results.sarif"
-
-      - name: Log in to registry
-        uses: redhat-actions/podman-login@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Image push to registry
-        run: buildah push ghcr.io/artm-devsecops/devsecops-template-api-java:${{ github.sha }}
+  build-image-workflow:
+    permissions:
+      packages: write # Required for Container
+      security-events: write # Required for Scanning
+    uses: artm-devsec-ops/.github/workflow-templates/artm-devsecops-build-image.yml@main
+    with:
+      image_tag: "v1"
+      image_context: "./target"
+      image_files: "ContainerFile"
+      container_registry: "ghcr.io"
+      scan_offline: true
