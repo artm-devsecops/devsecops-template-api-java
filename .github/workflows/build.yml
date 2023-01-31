@@ -11,6 +11,7 @@ on:
 
 jobs:
   build-java-workflow:
+    name: "Build application"
     permissions:
       checks: write # Required for jacoco-reporter
       pull-requests: write # Required for jacoco-reporter
@@ -21,6 +22,8 @@ jobs:
       fail_below_threshold: false
 
   build-image-workflow:
+    name: "Build image"
+    needs: build-java-workflow
     permissions:
       packages: write # Required for Container
       security-events: write # Required for Scanning
