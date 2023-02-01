@@ -35,6 +35,6 @@ jobs:
       artifact_path: "./target"
       image_tag: "v1"
       image_context: "./target"
-      image_files: "ContainerFile"
+      image_files: "Containerfile"
       container_registry: "ghcr.io"
       scan_offline: true
