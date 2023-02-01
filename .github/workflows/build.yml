@@ -19,6 +19,8 @@ jobs:
     uses: artm-devsecops/artm-workflow-templates/.github/workflows/artm-devsecops-build-java.yml@main
     with:
       java_version: 17
+      artifact_name: devsecops-template-api-java.jar
+      artifact_path: ./target
       fail_below_threshold: false
 
   build-image-workflow:
@@ -30,7 +32,7 @@ jobs:
     uses: artm-devsecops/artm-workflow-templates/.github/workflows/artm-devsecops-build-image.yml@main
     with:
       image_tag: "v1"
-      image_context: "./target"
+      image_context: "."
       image_files: "ContainerFile"
       container_registry: "ghcr.io"
       scan_offline: true
