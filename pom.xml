@@ -10,7 +10,7 @@
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>devsecops.template.api.java</groupId>
-	<artifactId>devsecops.template.api.java</artifactId>
+	<artifactId>devsecops-template-api-java</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>devsecops-template-api-java</name>
 	<description>Demo project for Spring Boot</description>
