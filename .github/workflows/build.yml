@@ -34,7 +34,7 @@ jobs:
       artifact_name: "devsecops-template-api-java-0.0.1-SNAPSHOT.jar"
       artifact_path: "./target"
       image_tag: "v1"
-      image_context: "."
+      image_context: "./target"
       image_files: "ContainerFile"
       container_registry: "ghcr.io"
       scan_offline: true
