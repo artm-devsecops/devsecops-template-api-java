@@ -19,8 +19,7 @@ jobs:
     uses: artm-devsecops/artm-workflow-templates/.github/workflows/artm-devsecops-build-java.yml@main
     with:
       java_version: 17
-      artifact_name: "devsecops-template-api-java-0.0.1-SNAPSHOT.jar"
-      artifact_path: "./target"
+      artifact_path: "./target/devsecops-template-api-java-0.0.1-SNAPSHOT.jar"
       fail_below_threshold: false
 
   build-image-workflow:
@@ -31,8 +30,7 @@ jobs:
       security-events: write # Required for Scanning
     uses: artm-devsecops/artm-workflow-templates/.github/workflows/artm-devsecops-build-image.yml@main
     with:
-      artifact_name: "devsecops-template-api-java-0.0.1-SNAPSHOT.jar"
-      artifact_path: "./target"
+      artifact_path: "./target/devsecops-template-api-java-0.0.1-SNAPSHOT.jar"
       image_tag: "v1"
       image_context: "./target"
       image_files: "Containerfile"
