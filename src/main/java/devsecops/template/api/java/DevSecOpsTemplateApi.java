@@ -1,13 +1,13 @@
-package quebec.artm.concerto.api.poc;
+package devsecops.template.api.java;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ConcertoPocJavaApiApplication {
+public class DevSecOpsTemplateApi {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ConcertoPocJavaApiApplication.class, args);
+		SpringApplication.run(DevSecOpsTemplateApi.class, args);
 	}
 
 }
